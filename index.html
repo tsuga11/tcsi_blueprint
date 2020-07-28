@@ -39,12 +39,13 @@ pk.eyJ1IjoidHN1Z2ExMSIsImEiOiJjanFmaTA5cGIyaXFoM3hqd3R5dzd3bzU3In0.TFqMjIIYtpcyh
     <script src="https://d3js.org/d3.v5.min.js"></script>
     <script src='https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.js'></script>
   
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/leaflet.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/leaflet.js"></script>
     <script src="https://unpkg.com/leaflet.vectorgrid@latest/dist/Leaflet.VectorGrid.bundled.js"></script>
     
     <!-- MBTiles for leaflet. Downloaded from https://gitlab.com/IvanSanchez/Leaflet.TileLayer.MBTiles -->
     <script src="https://unpkg.com/sql.js@0.3.2/js/sql.js"></script>
-    <script src="./Leaflet.TileLayer.MBTiles.js"></script>
+    
+    <script src = "TileLayer.Grayscale.js"></script>
     
     <style>
     
@@ -55,6 +56,8 @@ pk.eyJ1IjoidHN1Z2ExMSIsImEiOiJjanFmaTA5cGIyaXFoM3hqd3R5dzd3bzU3In0.TFqMjIIYtpcyh
         height: 100%;
         color: #818181;
         font-size:15px;
+        line-height: 1.4;
+        overscroll-behavior: contain;
       }
       
       .sidebar {
@@ -72,7 +75,7 @@ pk.eyJ1IjoidHN1Z2ExMSIsImEiOiJjanFmaTA5cGIyaXFoM3hqd3R5dzd3bzU3In0.TFqMjIIYtpcyh
       }
       
       .sidebar a {
-        padding: 8px 8px 8px 10px;
+        padding: -1px 8px 8px 10px;
         text-decoration: none;
         font-size: 25px;
         color: #818181;
@@ -89,11 +92,11 @@ pk.eyJ1IjoidHN1Z2ExMSIsImEiOiJjanFmaTA5cGIyaXFoM3hqd3R5dzd3bzU3In0.TFqMjIIYtpcyh
         top: 0;
         right: 25px;
         font-size: 36px;
-        margin-left: 50px;
+        margin-left: 55px;
       }
       
       .openbtn {
-        font-size: 20px;
+        font-size: 25px;
         cursor: pointer;
         background-color: #111;
         color: #818181;
@@ -105,6 +108,7 @@ pk.eyJ1IjoidHN1Z2ExMSIsImEiOiJjanFmaTA5cGIyaXFoM3hqd3R5dzd3bzU3In0.TFqMjIIYtpcyh
         background-color: #111;
         color: #f1f1f1;
       }
+    
 
       /* https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_accordion_animate */
       .accordion {
@@ -112,7 +116,7 @@ pk.eyJ1IjoidHN1Z2ExMSIsImEiOiJjanFmaTA5cGIyaXFoM3hqd3R5dzd3bzU3In0.TFqMjIIYtpcyh
         color: #818181;
         width: 100%;
         padding: 8px 8px 8px 10px;
-        font-size: 25px;
+        font-size: 20px;
         cursor: pointer;
         border: none;
         display: block;
@@ -179,17 +183,12 @@ pk.eyJ1IjoidHN1Z2ExMSIsImEiOiJjanFmaTA5cGIyaXFoM3hqd3R5dzd3bzU3In0.TFqMjIIYtpcyh
         #main {margin-left: 200px;}
       }
       
-      html, #map {
-        width: 100vw;
-        height: 100%;
-        margin-top: 25px;
-        position: float;
-      }
+
       
       .slider {
         -webkit-appearance: none;
         width: 100%;
-        height: 12px;
+        height: 15px;
         background: #d3d3d3;
         outline: none;
         opacity: 0.7;
@@ -204,17 +203,111 @@ pk.eyJ1IjoidHN1Z2ExMSIsImEiOiJjanFmaTA5cGIyaXFoM3hqd3R5dzd3bzU3In0.TFqMjIIYtpcyh
       .slider::-webkit-slider-thumb {
         -webkit-appearance: none;
         appearance: none;
-        width: 12px;
-        height: 12px;
+        width: 15px;
+        height: 15px;
         background: #315b7d;
         cursor: pointer;
       }
       
       .slider::-moz-range-thumb {
-        width: 12px;
-        height: 12px;
+        width: 15px;
+        height: 15px;
         background: #315b7d;
         cursor: pointer;
+      }
+      
+      .legend {
+        z-index: 800;
+        line-height: 18px;
+        color: #818181;
+      }
+      .legend i {
+        z-index: 800;
+        width: 18px;
+        height: 18px;
+        float: left;
+        margin-right: 8px;
+        opacity: 0.7;
+      }
+      
+      .info {
+        padding-right: 20px;
+        padding-bottom: 10px;
+        font: 12px;
+      }
+      div.info.legend.leaflet-control br {
+        z-index: 800;
+        clear: both;
+      }
+      
+      
+      
+      html {
+        width: 100%;
+        height: 100%;
+        margin-top: 25px;
+        position: absolute;
+        scroll-behavior: smooth;
+      }
+      
+      
+      #wrapper{
+        position:absolute;
+        height:100%;
+        width:100%;
+      }
+      
+      .panels { 
+        position:relative;
+        height:100%;
+        min-height:100%;
+        width:100%;
+        z-index:1000;
+    }
+    
+      #map{
+        position:fixed;
+        color:red;
+        top:0;
+        z-index:300;
+        margin-top: 50px;
+      }
+
+      
+      
+      #info_panel{
+         margin-top:75%;
+      }
+
+      #infoi {
+        position: fixed;
+        top: 135px;
+        right: 10px;
+        z-index: 2000;
+      }
+      
+      /* width */
+      ::-webkit-scrollbar {
+        width: 10px;
+      }
+      
+      /* Track */
+      ::-webkit-scrollbar-track {
+        background: #f1f1f1; 
+      }
+       
+      /* Handle */
+      ::-webkit-scrollbar-thumb {
+        background: #888; 
+      }
+      
+      /* Handle on hover */
+      ::-webkit-scrollbar-thumb:hover {
+        background: #555; 
+      } 
+      
+      .leaflet-control{
+        z-index: 2000;
       }
       
     </style>
@@ -222,11 +315,11 @@ pk.eyJ1IjoidHN1Z2ExMSIsImEiOiJjanFmaTA5cGIyaXFoM3hqd3R5dzd3bzU3In0.TFqMjIIYtpcyh
   </head>
 
 
+
+
+
   <body>
   
-
-    
-    
     <nav class="navbar fixed-top navbar-dark" style="background-color: #111;">
       
       <button class="openbtn" onclick="openNav()">&#9776;</button>  
@@ -237,7 +330,6 @@ pk.eyJ1IjoidHN1Z2ExMSIsImEiOiJjanFmaTA5cGIyaXFoM3hqd3R5dzd3bzU3In0.TFqMjIIYtpcyh
         <button class="accordion">Basemap</button>
         <div class = 'panel'>
           <a id = 'basemap_dark' href = "#" style = "font-size:20px; padding:0;">Dark</a>
-          <a id = 'basemap_hillshade' href = "#" style = "font-size:20px; padding:0;">Hillshade</a>
           <a id = 'basemap_satellite' href = "#" style = "font-size:20px; padding:0;">Satellite</a>
         </div>
 
@@ -261,14 +353,7 @@ pk.eyJ1IjoidHN1Z2ExMSIsImEiOiJjanFmaTA5cGIyaXFoM3hqd3R5dzd3bzU3In0.TFqMjIIYtpcyh
                 <input type="range" min="1" max="100" value="50" class="slider" id="slider_lmu" onchange= "lmu_slider_func(this.value)">
               </td>
             </tr>
-            <tr>
-              <td style = "width:70%">
-                <a id = 'layer_climClass' href = "#" style = "font-size:20px; padding:0;">Climate class</a>
-              </td>
-              <td style = "width:30%;vertical-align:center; padding-top:8px;">
-                <input type="range" min="1" max="100" value="50" class="slider" id="slider_climClass">
-              </td>
-            </tr>
+
           </table>
 
         </div>
@@ -293,7 +378,7 @@ pk.eyJ1IjoidHN1Z2ExMSIsImEiOiJjanFmaTA5cGIyaXFoM3hqd3R5dzd3bzU3In0.TFqMjIIYtpcyh
                <a id = 'layer_tsld' href = "#" style = "font-size:20px; padding:0;">Years since last disturbance</a>
               </td>
               <td style = "width:30%;vertical-align:center; padding-top:8px;">
-                <input type="range" min="1" max="100" value="50" class="slider" id="slider_tsld" onchange = "drid_slider_func(this.value)">
+                <input type="range" min="1" max="100" value="50" class="slider" id="slider_tsld" onchange = "tsld_slider_func(this.value)">
               </td>
             </tr>
             
@@ -302,7 +387,7 @@ pk.eyJ1IjoidHN1Z2ExMSIsImEiOiJjanFmaTA5cGIyaXFoM3hqd3R5dzd3bzU3In0.TFqMjIIYtpcyh
                <a id = 'layer_n_dist' href = "#" style = "font-size:20px; padding:0;">Number of disturbances</a>
               </td>
               <td style = "width:30%;vertical-align:center; padding-top:8px;">
-                <input type="range" min="1" max="100" value="50" class="slider" id="slider_n_dist" onchange = "drid_slider_func(this.value)">
+                <input type="range" min="1" max="100" value="50" class="slider" id="slider_ndist" onchange = "ndist_slider_func(this.value)">
               </td>
             </tr>            
             
@@ -314,15 +399,120 @@ pk.eyJ1IjoidHN1Z2ExMSIsImEiOiJjanFmaTA5cGIyaXFoM3hqd3R5dzd3bzU3In0.TFqMjIIYtpcyh
       
     </nav>
     
+    <script>
     
+      $(document).ready(function(){
+        
+        if(L.Browser.mobile){
+          console.log("MOBILE");
     
-    <div style="height: 100%">
-      <div id="map"></div>
+          $("#info_panel").css({
+             "margin-top" : "120%"
+          });
+        }
+        else{
+          console.log("NOT MOBILE");
+          
+          $("#info_panel").css({
+             "margin-top" : "75%"
+          });
+          
+          console.log($("#info_panel").css("margin-top"));
+        }
+        
+      })
+
+    
+    var windowHt = window.innerHeight;
+    var scrollHt = 135;
+    var scrollDir;
+    var scroll_01 = $(document).scrollTop();
+
+
+      $(document).scroll(function() {
+        
+        var currSH = $(this).scrollTop();
+        var currSHp = 1 - $(this).scrollTop()/windowHt;
+        
+        if(currSH > scroll_01){
+          
+          scrollDir = 1;
+          console.log(currSHp);
+          
+          if(currSH > 700)
+            scrollHt += -5;
+            
+          scrollHt = Math.max(scrollHt, 0);
+
+          $("#infoi").css({
+            "top": scrollHt
+          });    
+        
+        }
+        else{
+          
+          scrollDir = -1;
+          scrollHt += 6;
+          
+          scrollHt = Math.min(Math.max(scrollHt, 0), 135);
+
+          $("#infoi").css({
+            "top": scrollHt
+          });   
+        
+        }
+        
+        scroll_01 = $(this).scrollTop();
+        
+      });      
+    </script>
+    
+    <div id = "wrapper">
+      <div id = "map" class = "panels"></div>
+      <div id = "info_panel" class = "panels" style = "background-color:#111">
+        <p>This is panel 1</p>
+      </div>
+
+      <div id = "info_panel2" class = "panels" style = "background-color:#111">
+        <p>This is panel 2</p>
+      </div>
+      
+      <div id = "infoi">
+          <table>
+          
+          <tr>
+          <td>
+          <a href="#top" style = "color:white">Map</a>
+          </td>
+          </tr>
+          
+          <tr>
+          <td>
+          <a href="#info_panel" style = "color:white">Stats</a>
+          </td>
+          </tr>
+          
+          </table>        
+      </div>
+      
     </div>
-  
+
 
  
   
+  
+  <!-- 
+  RASTER TILES:
+  Used tiler package in R to convert from raster to raster tile. This included a color ramp and allowed NA to be
+   transparent, so it worked great. Then I uploaded them to github. The trick there was the http address needed
+   for the L.tileLayer to find it ("https://github.com/tsuga11/tcsi_blueprint/raw/master/raster_tiles/tsld_1970_2019/{z}/{x}/{-y}.png"). Notice the -y not y at the end, and the "raw/master/" in the address. I settled on zoom levels
+   9 - 16, which takes about an hour to run for one raster and results in 10,000s of small files. Any higher zoom
+   level and it took forwever to run. 9 - 15 took 15 minutes for instance.
+   
+   VECTOR TILES:
+   Uploaded shapefile to mapbox and used L.vectorGrid.protobuf.
+  
+  -->
   
   
  
@@ -333,12 +523,10 @@ pk.eyJ1IjoidHN1Z2ExMSIsImEiOiJjanFmaTA5cGIyaXFoM3hqd3R5dzd3bzU3In0.TFqMjIIYtpcyh
     
 
       map = L.map('map', {
-        center: [39.1, -120.4],
-        zoom: 9,
         minZoom: 9,
         maxZoom: 21,
         zoomControl: false
-      }); // Create map object and pass it our options object from above
+      }).setView([39.1, -120.4], 9); // Create map object and pass it our options object from above
       
       
       map.on('zoomend',function(e){
@@ -346,11 +534,36 @@ pk.eyJ1IjoidHN1Z2ExMSIsImEiOiJjanFmaTA5cGIyaXFoM3hqd3R5dzd3bzU3In0.TFqMjIIYtpcyh
       });      
       
         
-      
-      
-      
+      L.control.zoom({
+        position:'topright'
+      }).addTo(map);
       
 
+
+    //var toc = L.control({position: 'topright'})
+    //toc.onAdd = function(map){
+    //      var div = L.DomUtil.create('div');
+    //      div.innerHTML = `
+    //      <table>
+          
+    //      <tr>
+    //      <td>
+    //      <a href="#map" style = "color:white">Map</a>
+    //      </td>
+    //      </tr>
+          
+    //      <tr>
+    //      <td>
+    //      <a href="#info_panel" style = "color:white">Stats</a>
+    //      </td>
+    //      </tr>
+          
+    //      </table>`; 
+    //      return div;
+    //}
+      
+    //toc.addTo(map);
+      
       ///
       /// LAYERS Open up
       ///
@@ -358,11 +571,16 @@ pk.eyJ1IjoidHN1Z2ExMSIsImEiOiJjanFmaTA5cGIyaXFoM3hqd3R5dzd3bzU3In0.TFqMjIIYtpcyh
       // Some example styling
       // https://openmaptiles.org/docs/website/leaflet/ 
 
+      // See about feature selection
+      // https://www.ovrdc.org/apps/vector-grid-pbf.html#15/38.7509/-82.8590
+      
+      // Also see L.Browser.mobile to determine if mobile or not
+      
       // TCSI Boundary
       var tcsi_boundary_layer = L.vectorGrid.protobuf(
         "https://api.mapbox.com/v4/tsuga11.48jp66kf/{z}/{x}/{y}.vector.pbf?access_token={token}", {
           
-          rendererFactory: L.svg.tile,
+          rendererFactory: L.svg.tile, // L.canvas.tile
 
           vectorTileLayerStyles: {
             
@@ -398,10 +616,10 @@ pk.eyJ1IjoidHN1Z2ExMSIsImEiOiJjanFmaTA5cGIyaXFoM3hqd3R5dzd3bzU3In0.TFqMjIIYtpcyh
             
             "TCSI_LMU_simp-dawgta": function(properties, zoom){ //TCSI_LMU-5hxymj
               var level = properties.LMU;
-              if(level == 1){col = "#189BCC";}
-              else if(level == 2){col = "#BECC41";}
-              else if(level == 3){col = "#EA213A";}
-              else if(level == 4){col = "green";}
+              if(level == 1){col = "#ffffcc";}
+              else if(level == 2){col = "#238443";}
+              else if(level == 3){col = "#78c679";}
+              else if(level == 4){col = "#c2e699";}
               
               return{
                  weight: 0.1,
@@ -442,10 +660,10 @@ pk.eyJ1IjoidHN1Z2ExMSIsImEiOiJjanFmaTA5cGIyaXFoM3hqd3R5dzd3bzU3In0.TFqMjIIYtpcyh
 			}).bindTooltip(function (layer) { // HOVER TOOLTIP on LMU LAYER
 			  
 			  //var_01 = layer.properties.LMU;
-			  if(layer.properties.LMU == 1){var_01 = 'Ridge';}
-			  else if(layer.properties.LMU == 2){var_01 = 'Valley';}
-			  else if(layer.properties.LMU == 3){var_01 = 'NE slope';}
-			  else{var_01 = 'SW slope';}
+			  if(layer.properties.LMU == 1){var_01 = '1: Ridge';}
+			  else if(layer.properties.LMU == 2){var_01 = '2: Valley';}
+			  else if(layer.properties.LMU == 3){var_01 = '3: NE slope';}
+			  else{var_01 = '4: SW slope';}
         
         //return String(var_01);
         return String("<table id = 'tooltipTable'>" +
@@ -515,10 +733,9 @@ pk.eyJ1IjoidHN1Z2ExMSIsImEiOiJjanFmaTA5cGIyaXFoM3hqd3R5dzd3bzU3In0.TFqMjIIYtpcyh
 				})
 
 				L.DomEvent.stop(e);
-			}).bindTooltip(function (layer) { // HOVER TOOLTIP on LMU LAYER
+			}).bindTooltip(function (layer) { 
 			  var pDrid_var;
 			  
-			  //var_01 = layer.properties.LMU;
 			  if(layer.properties.pDRID == 1){pDrid_var = '<-66%';}
 			  else if(layer.properties.pDRID == 2){pDrid_var = '-66 to -33%';}
 			  else if(layer.properties.pDRID == 3){pDrid_var = '-33 to 0%';}
@@ -557,7 +774,7 @@ pk.eyJ1IjoidHN1Z2ExMSIsImEiOiJjanFmaTA5cGIyaXFoM3hqd3R5dzd3bzU3In0.TFqMjIIYtpcyh
                  
           vectorTileLayerStyles: {
             
-            "drid_1970_2019_tcsi-7f7r5z": function(properties, zoom){ //TCSI_LMU-5hxymj
+            "drid_1970_2019_tcsi-7f7r5z": function(properties, zoom){ 
               var level = properties.tsld;
 
               if(level >= 1 && level < 10){col = "#ffffd4";}
@@ -586,7 +803,7 @@ pk.eyJ1IjoidHN1Z2ExMSIsImEiOiJjanFmaTA5cGIyaXFoM3hqd3R5dzd3bzU3In0.TFqMjIIYtpcyh
 				highlight = e.layer.properties.Id;
 				
 				//alert(highlight);
-				tsld_layer.setFeatureStyle(highlight, { // HOVER HIGHLIGHT on LMU LAYER
+				tsld_layer.setFeatureStyle(highlight, { 
 					weight: 1,
 					color: '#8b7500',
 					opacity: 0.5,
@@ -595,10 +812,9 @@ pk.eyJ1IjoidHN1Z2ExMSIsImEiOiJjanFmaTA5cGIyaXFoM3hqd3R5dzd3bzU3In0.TFqMjIIYtpcyh
 				})
 
 				L.DomEvent.stop(e);
-			}).bindTooltip(function (layer) { // HOVER TOOLTIP on LMU LAYER
+			}).bindTooltip(function (layer) { 
 			  var pDrid_var;
-			  
-			  //var_01 = layer.properties.LMU;
+
 			  if(layer.properties.pDRID == 1){pDrid_var = '<-66%';}
 			  else if(layer.properties.pDRID == 2){pDrid_var = '-66 to -33%';}
 			  else if(layer.properties.pDRID == 3){pDrid_var = '-33 to 0%';}
@@ -637,7 +853,7 @@ pk.eyJ1IjoidHN1Z2ExMSIsImEiOiJjanFmaTA5cGIyaXFoM3hqd3R5dzd3bzU3In0.TFqMjIIYtpcyh
                  
           vectorTileLayerStyles: {
             
-            "drid_1970_2019_tcsi-7f7r5z": function(properties, zoom){ //TCSI_LMU-5hxymj
+            "drid_1970_2019_tcsi-7f7r5z": function(properties, zoom){ 
               var level = properties.n_dist;
 
               if(level == 1){col = "#ffffcc";}
@@ -669,7 +885,7 @@ pk.eyJ1IjoidHN1Z2ExMSIsImEiOiJjanFmaTA5cGIyaXFoM3hqd3R5dzd3bzU3In0.TFqMjIIYtpcyh
 				highlight = e.layer.properties.Id;
 				
 				//alert(highlight);
-				n_dist_layer.setFeatureStyle(highlight, { // HOVER HIGHLIGHT on LMU LAYER
+				n_dist_layer.setFeatureStyle(highlight, { 
 					weight: 1,
 					color: '#8b7500',
 					opacity: 0.5,
@@ -678,10 +894,9 @@ pk.eyJ1IjoidHN1Z2ExMSIsImEiOiJjanFmaTA5cGIyaXFoM3hqd3R5dzd3bzU3In0.TFqMjIIYtpcyh
 				})
 
 				L.DomEvent.stop(e);
-			}).bindTooltip(function (layer) { // HOVER TOOLTIP on LMU LAYER
+			}).bindTooltip(function (layer) { 
 			  var pDrid_var;
-			  
-			  //var_01 = layer.properties.LMU;
+
 			  if(layer.properties.pDRID == 1){pDrid_var = '<-66%';}
 			  else if(layer.properties.pDRID == 2){pDrid_var = '-66 to -33%';}
 			  else if(layer.properties.pDRID == 3){pDrid_var = '-33 to 0%';}
@@ -706,7 +921,7 @@ pk.eyJ1IjoidHN1Z2ExMSIsImEiOiJjanFmaTA5cGIyaXFoM3hqd3R5dzd3bzU3In0.TFqMjIIYtpcyh
       
       
       // highlight poly on click...
-      // https://github.com/Leaflet/Leaflet.VectorGrid/blob/master/docs/demo-points.html
+      // https://github.com/Leaflet/Leaflet.VectorGri d/blob/master/docs/demo-points.html
       var highlight;
       var var_01;
   		var clearHighlight = function() {
@@ -735,43 +950,59 @@ pk.eyJ1IjoidHN1Z2ExMSIsImEiOiJjanFmaTA5cGIyaXFoM3hqd3R5dzd3bzU3In0.TFqMjIIYtpcyh
      // https://rdrr.io/github/gisma/robubu/man/makeTile.html
      
 
-     var raster_drid = L.tileLayer('https://api.mapbox.com/v4/tsuga11.3qlbb78s/{z}/{x}/{y}.png?access_token={accessToken}', {
-        zIndex: 10,
-        accessToken: 'pk.eyJ1IjoidHN1Z2ExMSIsImEiOiJjanFmaTA5cGIyaXFoM3hqd3R5dzd3bzU3In0.TFqMjIIYtpcyhzNh4iMcQA'
-      });
+    // var raster_drid = L.tileLayer('https://api.mapbox.com/v4/tsuga11.3qlbb78s/{z}/{x}/{y}.png?access_token={accessToken}', {
+       // zIndex: 10,
+       // accessToken: 'pk.eyJ1IjoidHN1Z2ExMSIsImEiOiJjanFmaTA5cGIyaXFoM3hqd3R5dzd3bzU3In0.TFqMjIIYtpcyhzNh4iMcQA'
+     // });
   
-    // THIS WORKS!!! Not sure why not on GITHUB, need to figure that out
+    // THIS WORKS!!! 
     // tiler - R package that converts a tif to raster tiles
     // See TCSI/Scripts/raster_to_tiles.r
-    // Might be possible to et popup of pixel values: https://github.com/mapbox/raster-tile-query
-     var raster_tsld = L.tileLayer("./raster_tiles/tsld_1970_2019/{z}/{x}/{-y}.png", {//L.tileLayer("https://tsuga11.github.io/tcsi/tiles/{z}/{x}/{-y}.png", {
+    // Might be possible to add a popup of pixel values: https://github.com/mapbox/raster-tile-query
+    // For Github, the "raw/master" was not obvious and got it from:
+    // https://khufkens.com/2018/09/19/github-tile-server/
+     var raster_tsld = L.tileLayer("https://github.com/tsuga11/tcsi_blueprint/raw/master/raster_tiles/tsld_1970_2019/{z}/{x}/{-y}.png", {// ./raster_tiles/tsld_1970_2019/{z}/{x}/{-y}.png
         zIndex: 10,
         tileSize: 256,
         zoomOffset: 0,
         opacity: 0.7,
         maxNativeZoom: 16,
-        minNativeZoom: 9
-      })//.addTo(map);
+        minNativeZoom: 8
+      })
       
+          map.on('click', function (e) {
       
-     var raster_ndist = L.tileLayer("./raster_tiles/n_disturbances_1970_2019/{z}/{x}/{-y}.png", {//L.tileLayer("https://tsuga11.github.io/tcsi/tiles/{z}/{x}/{-y}.png", {
+	          // the x/y of the tile url
+	          var layerPoint = map.project(e.latlng).floor();
+	          console.log(layerPoint);
+	          var tilePoint = layerPoint.divideBy(256).floor();
+	          console.log(tilePoint);
+            
+        	  var pointInTile = layerPoint.subtract(tilePoint.multiplyBy(256));
+        	  console.log(pointInTile);
+
+          });
+      
+
+      
+     var raster_ndist = L.tileLayer("https://github.com/tsuga11/tcsi_blueprint/raw/master/raster_tiles/n_disturbances_1970_2019/{z}/{x}/{-y}.png", {//L.tileLayer("https://tsuga11.github.io/tcsi/tiles/{z}/{x}/{-y}.png", {
         zIndex: 10,
         tileSize: 256,
         zoomOffset: 0,
         opacity: 0.7,
         maxNativeZoom: 16,
-        minNativeZoom: 9
+        minNativeZoom: 8
       })    
       
-      var raster_drid = L.tileLayer("./raster_tiles/drid_1970_2019/{z}/{x}/{-y}.png", {//L.tileLayer("https://tsuga11.github.io/tcsi/tiles/{z}/{x}/{-y}.png", {
+      var raster_drid = L.tileLayer("https://github.com/tsuga11/tcsi_blueprint/raw/master/raster_tiles/drid_1970_2019/{z}/{x}/{-y}.png", {//L.tileLayer("https://tsuga11.github.io/tcsi/tiles/{z}/{x}/{-y}.png", {
         zIndex: 10,
         tileSize: 256,
         zoomOffset: 0,
         opacity: 0.7,
         maxNativeZoom: 16,
-        minNativeZoom: 9
+        minNativeZoom: 8
       })    
-      
+
     </script>
     
 
@@ -790,7 +1021,7 @@ pk.eyJ1IjoidHN1Z2ExMSIsImEiOiJjanFmaTA5cGIyaXFoM3hqd3R5dzd3bzU3In0.TFqMjIIYtpcyh
      // })//.addTo(map);  
     </script>
     
-  
+
   
   
   
@@ -814,8 +1045,7 @@ pk.eyJ1IjoidHN1Z2ExMSIsImEiOiJjanFmaTA5cGIyaXFoM3hqd3R5dzd3bzU3In0.TFqMjIIYtpcyh
         zoomOffset: -1        
       }).addTo(map);    
       
-    console.log(maptiler_hillshade)
-      
+   
       // DARK 
       var dark = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/dark-v9/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoidHN1Z2ExMSIsImEiOiJjanFmaTA5cGIyaXFoM3hqd3R5dzd3bzU3In0.TFqMjIIYtpcyhzNh4iMcQA', {
         zIndex: 0,
@@ -847,11 +1077,9 @@ pk.eyJ1IjoidHN1Z2ExMSIsImEiOiJjanFmaTA5cGIyaXFoM3hqd3R5dzd3bzU3In0.TFqMjIIYtpcyh
 
 
       var basemap_dark_counter = document.getElementById("basemap_dark");
-      var basemap_hillshade_counter = document.getElementById("basemap_hillshade");
       var basemap_satellite_counter = document.getElementById("basemap_satellite");
       
       basemap_dark_count = 1;
-      basemap_hillshade_count = 0;
       basemap_satellite_count = 0;
       
       var tcsi_boundary_color = "#FFFFFF"
@@ -890,16 +1118,6 @@ pk.eyJ1IjoidHN1Z2ExMSIsImEiOiJjanFmaTA5cGIyaXFoM3hqd3R5dzd3bzU3In0.TFqMjIIYtpcyh
               $(this).css({'color' : '#f1f1f1'});
             }
           ) 
-          
-          $("#basemap_hillshade").css({'color' : '#818181'});
-          $("#basemap_hillshade").mouseover(
-            function(){
-              $(this).css({'color' : '#f1f1f1'})
-            })
-          $("#basemap_hillshade").mouseleave(
-            function(){
-              $(this).css({'color' : '#818181'});
-            })
 
           $("#basemap_satellite").css({'color' : '#818181'});
           $("#basemap_satellite").mouseover(
@@ -913,67 +1131,6 @@ pk.eyJ1IjoidHN1Z2ExMSIsImEiOiJjanFmaTA5cGIyaXFoM3hqd3R5dzd3bzU3In0.TFqMjIIYtpcyh
       };
   
   
-      basemap_hillshade_counter.onclick = function() {
-        basemap_hillshade_count += 1;
- 
-          
-          dark.remove(map);
-          satellite.remove(map);
-          hillshade.addTo(map);
-          
-          // CHANGE BOUNDARY LAYER FROM BLACK TO WHITE SO IT CAN SHOW UP BETTER ON THE HILLSHADE
-          if(isOdd(tcsiBounds_count)){
-
-            tcsi_boundary_layer.options.vectorTileLayerStyles["TCSI_boundary-9wfci2"] = () => {
-              return{
-                   weight: slider_tcsi_boundary.value,
-                   color: '#000000',
-                   fill: false,
-                   opacity: 0.5
-                }   
-            }
-            
-            tcsi_boundary_layer.redraw();
-            tcsi_boundary_color = "#000000"
-          }
-
-          
-          
-          $("#basemap_dark").css({'color' : '#818181'});
-          $("#basemap_dark").mouseover(
-            function(){
-              $(this).css({'color' : '#f1f1f1'})
-            })
-          $("#basemap_dark").mouseleave(
-            function(){
-              $(this).css({'color' : '#818181'});
-            })
-            
-            
-          $("#basemap_satellite").css({'color' : '#818181'});
-          $("#basemap_satellite").mouseover(
-            function(){
-              $(this).css({'color' : '#f1f1f1'})
-            })
-          $("#basemap_satellite").mouseleave(
-            function(){
-              $(this).css({'color' : '#818181'});
-            }) 
-            
-            
-          $("#basemap_hillshade").css({'color' : '#f1f1f1'});
-          $("#basemap_hillshade").mouseover(
-            function(){
-              $(this).css({'color' : '#f1f1f1'})
-            })
-          $("#basemap_hillshade").mouseleave(
-            function(){
-              $(this).css({'color' : '#f1f1f1'});
-            })           
-      };
-      
-      
-      
         basemap_satellite_counter.onclick = function() {
         basemap_satellite_count += 1;
  
@@ -1020,17 +1177,7 @@ pk.eyJ1IjoidHN1Z2ExMSIsImEiOiJjanFmaTA5cGIyaXFoM3hqd3R5dzd3bzU3In0.TFqMjIIYtpcyh
             function(){
               $(this).css({'color' : '#818181'});
             }) 
-            
-            
-          $("#basemap_hillshade").css({'color' : '#818181'});
-          $("#basemap_hillshade").mouseover(
-            function(){
-              $(this).css({'color' : '#f1f1f1'})
-            })
-          $("#basemap_hillshade").mouseleave(
-            function(){
-              $(this).css({'color' : '#818181'});
-            })           
+    
       };
       
     </script>
@@ -1081,7 +1228,7 @@ pk.eyJ1IjoidHN1Z2ExMSIsImEiOiJjanFmaTA5cGIyaXFoM3hqd3R5dzd3bzU3In0.TFqMjIIYtpcyh
       tcsiBounds_counter.onclick = function() {
         tcsiBounds_count += 1;
         
-        map.options.minZoom = 8;
+        map.options.minZoom = 9;
         
         if(isOdd(tcsiBounds_count)){
 
@@ -1137,8 +1284,9 @@ pk.eyJ1IjoidHN1Z2ExMSIsImEiOiJjanFmaTA5cGIyaXFoM3hqd3R5dzd3bzU3In0.TFqMjIIYtpcyh
         map.options.minZoom = 10;
         
         if(map.getZoom() < 10){
-          map.setZoom(10);  
+          map.setZoom(10);
         }
+
         
         if(isOdd(count)){
           
@@ -1176,15 +1324,120 @@ pk.eyJ1IjoidHN1Z2ExMSIsImEiOiJjanFmaTA5cGIyaXFoM3hqd3R5dzd3bzU3In0.TFqMjIIYtpcyh
   
     </script>
   
+  
+  
+  
+  
+  
+  
+  
      
+    <!-- 
+    ////
+    //// LEGENDS 
+    ////
+    -->
+    <script>
+      
+      //DRID LEGEND
+      var legend_drid = L.control({'position': 'bottomright'});
+
+      function getColor_drid(d) {
+          return d == 1  ? '#d53e4f' :
+                 d == 2  ? '#fc8d59' :
+                 d == 3  ? '#fee08b' :
+                 d == 4  ? '#e6f598' :
+                 d == 5  ? '#99d594' :
+                           '#3288bd' ;
+      }      
+      
+      legend_drid.onAdd = function (map) {
+            var div = L.DomUtil.create('div', 'info legend'),
+               grades = [1, 2, 3, 4, 5, 6],
+               labels = ['<-66%','-66 to -33%','-33 to 0%','0 to 33%','33 to 66%', ">66%"];
+               //labels.reverse();
+               
+          // loop through our density intervals and generate a label with a colored square for each interval
+          for (var i = 0; i < grades.length; i++) {
+      
+              div.innerHTML +=
+                  '<i style="background:' + getColor_drid(grades[i]) + '"></i> ' +
+                  labels[i] + '<br>';
+          }
+          return div;
+      };
+      
+      
+      //TSLD LEGEND
+      var legend_tsld = L.control({'position': 'bottomright'});
+
+      function getColor_tsld(d) {
+          return d == 1  ? '#ffffb2' :
+                 d == 2  ? '#fed976' :
+                 d == 3  ? '#feb24c' :
+                 d == 4  ? '#fd8d3c' :
+                 d == 5  ? '#f03b20' :
+                           '#bd0026' ;
+      }      
+      
+      legend_tsld.onAdd = function (map) {
+            var div = L.DomUtil.create('div', 'info legend'),
+               grades = [1, 2, 3, 4, 5, 6],
+               labels = ['<5', '5-10', '10-20', '20-30', '30-40', '40-50'];
+               
+      
+          // loop through our density intervals and generate a label with a colored square for each interval
+          for (var i = 0; i < grades.length; i++) {
+      
+              div.innerHTML +=
+                  '<i style="background:' + getColor_tsld(grades[i]) + '"></i> ' +
+                  labels[i] + '<br>';
+          }
+          return div;
+      };   
+      
+      
+      //Numb Dist LEGEND
+      var legend_ndist = L.control({'position': 'bottomright'});
+
+      function getColor_ndist(d) {
+          return d == 1  ? '#ffffd4' :
+                 d == 2  ? '#fee391' :
+                 d == 3  ? '#fec44f' :
+                 d == 4  ? '#fe9929' :
+                 d == 5  ? '#d95f0e' :
+                           '#993404' ;
+      }      
+      
+      legend_ndist.onAdd = function (map) {
+            var div = L.DomUtil.create('div', 'info legend'),
+               grades = [1, 2, 3, 4, 5, 6],
+               labels = ['1', '2', '3', '4', '5', '>5'];
+               
+      
+          // loop through our density intervals and generate a label with a colored square for each interval
+          for (var i = 0; i < grades.length; i++) {
+      
+              div.innerHTML +=
+                  '<i style="background:' + getColor_ndist(grades[i]) + '"></i> ' +
+                  labels[i] + '<br>';
+          }
+          return div;
+      }; 
+      
+    </script>
 
 
+
+
+    <!-- TURN ON LAYERS -->
     <!-- DRID layer -->
     <script>
       
       function isOdd(num) { return num % 2;}
-      
-      
+
+
+
       // DRID layer on/off...
       var drid_counter = document.getElementById("layer_drid");
       drid_count = 0;
@@ -1192,44 +1445,42 @@ pk.eyJ1IjoidHN1Z2ExMSIsImEiOiJjanFmaTA5cGIyaXFoM3hqd3R5dzd3bzU3In0.TFqMjIIYtpcyh
       drid_counter.onclick = function() {
         drid_count += 1;
         
-        map.options.minZoom = 10;
+        map.options.minZoom = 9;
         
-        if(map.getZoom() < 10){
-          map.setZoom(10);  
-        }
         
+        //https://github.com/khufkens/mountain_forest_map
+        //var legend_drid = L.control({position: 'bottomright'});
+
         if(isOdd(drid_count)){
           
           raster_drid.addTo(map);
-          
+          legend_drid.addTo(map);
+
           
           $("#layer_drid").css({'color' : '#f1f1f1'});
           $("#layer_drid").mouseover(
             function(){
               $(this).css({'color' : '#f1f1f1'})
-            }
-          )
+            })
           $("#layer_drid").mouseleave(
             function(){
               $(this).css({'color' : '#f1f1f1'});
-            }
-          )           
+            })
         }
         else{
-          
-          raster_drid.remove()
-          
+          raster_drid.remove();
+          legend_drid.remove();
+
+         
           $("#layer_drid").css({'color' : '#818181'});
           $("#layer_drid").mouseover(
             function(){
               $(this).css({'color' : '#f1f1f1'})
-            }
-          )
+            })
           $("#layer_drid").mouseleave(
             function(){
               $(this).css({'color' : '#818181'});
-            }
-          )            
+            })
         }
       };
   
@@ -1251,18 +1502,13 @@ pk.eyJ1IjoidHN1Z2ExMSIsImEiOiJjanFmaTA5cGIyaXFoM3hqd3R5dzd3bzU3In0.TFqMjIIYtpcyh
         
         
                   
-        map.options.minZoom = 10;
-        
-        if(map.getZoom() < 10){
-          map.setZoom(10);  
-        }
-        
+        map.options.minZoom = 9;
 
         
         if(isOdd(tsld_count)){
 
           raster_tsld.addTo(map);    
-            
+          legend_tsld.addTo(map);
           
           $("#layer_tsld").css({'color' : '#f1f1f1'});
           $("#layer_tsld").mouseover(
@@ -1279,6 +1525,7 @@ pk.eyJ1IjoidHN1Z2ExMSIsImEiOiJjanFmaTA5cGIyaXFoM3hqd3R5dzd3bzU3In0.TFqMjIIYtpcyh
         else{
           
           raster_tsld.remove()
+          legend_tsld.remove();
           
           $("#layer_tsld").css({'color' : '#818181'});
           $("#layer_tsld").mouseover(
@@ -1302,19 +1549,13 @@ pk.eyJ1IjoidHN1Z2ExMSIsImEiOiJjanFmaTA5cGIyaXFoM3hqd3R5dzd3bzU3In0.TFqMjIIYtpcyh
       n_dist_counter.onclick = function() {
         n_dist_count += 1;
         
-        
-                  
-        map.options.minZoom = 10;
-        
-        if(map.getZoom() < 10){
-          map.setZoom(10);  
-        }
-        
+        map.options.minZoom = 9;
 
         if(isOdd(n_dist_count)){
 
           raster_ndist.addTo(map);    
-
+          legend_ndist.addTo(map);
+          
           $("#layer_n_dist").css({'color' : '#f1f1f1'});
           $("#layer_n_dist").mouseover(
             function(){
@@ -1330,6 +1571,7 @@ pk.eyJ1IjoidHN1Z2ExMSIsImEiOiJjanFmaTA5cGIyaXFoM3hqd3R5dzd3bzU3In0.TFqMjIIYtpcyh
         else{
           
           raster_ndist.remove()
+          legend_ndist.remove();
           
           $("#layer_n_dist").css({'color' : '#818181'});
           $("#layer_n_dist").mouseover(
@@ -1382,12 +1624,21 @@ pk.eyJ1IjoidHN1Z2ExMSIsImEiOiJjanFmaTA5cGIyaXFoM3hqd3R5dzd3bzU3In0.TFqMjIIYtpcyh
         }  
         
         
+        
         function drid_slider_func(value){
-          if(drid_layer != undefined)
-            drid_layer.setOpacity(value / 100);
-            
-            
+          if(raster_drid != undefined)
+            raster_drid.setOpacity(value / 100);
         }
+        
+        function tsld_slider_func(value){
+          if(raster_tsld != undefined)
+            raster_tsld.setOpacity(value / 100);
+        }  
+        
+        function ndist_slider_func(value){
+          if(raster_ndist != undefined)
+            raster_ndist.setOpacity(value / 100);
+        }  
         
     </script>   
     
