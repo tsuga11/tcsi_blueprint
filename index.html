@@ -29,7 +29,9 @@ pk.eyJ1IjoidHN1Z2ExMSIsImEiOiJjanFmaTA5cGIyaXFoM3hqd3R5dzd3bzU3In0.TFqMjIIYtpcyh
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel='stylesheet' />
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.css' rel='stylesheet' />
     <link href='https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.css' rel='stylesheet' />
+    <link href='bootstrap.min.css' rel='stylesheet' />
     <link href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css" rel="stylesheet" />
+    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>  
       
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
@@ -39,9 +41,11 @@ pk.eyJ1IjoidHN1Z2ExMSIsImEiOiJjanFmaTA5cGIyaXFoM3hqd3R5dzd3bzU3In0.TFqMjIIYtpcyh
     <script src="https://d3js.org/d3.v5.min.js"></script>
     <script src='https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.js'></script>
   
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/leaflet.js"></script>
     <script src="https://unpkg.com/leaflet.vectorgrid@latest/dist/Leaflet.VectorGrid.bundled.js"></script>
     
+<link rel="stylesheet" href="//unpkg.com/leaflet-gesture-handling/dist/leaflet-gesture-handling.min.css" type="text/css">
+<script src="//unpkg.com/leaflet-gesture-handling"></script>    
     <!-- MBTiles for leaflet. Downloaded from https://gitlab.com/IvanSanchez/Leaflet.TileLayer.MBTiles -->
     <script src="https://unpkg.com/sql.js@0.3.2/js/sql.js"></script>
     
@@ -52,7 +56,7 @@ pk.eyJ1IjoidHN1Z2ExMSIsImEiOiJjanFmaTA5cGIyaXFoM3hqd3R5dzd3bzU3In0.TFqMjIIYtpcyh
     <style>
     
       body {
-        font-family: "Lato", sans-serif;
+        font-family: "Roboto", sans-serif;
         background-color: #111;
         margin: 0;
         height: 100%;
@@ -62,6 +66,20 @@ pk.eyJ1IjoidHN1Z2ExMSIsImEiOiJjanFmaTA5cGIyaXFoM3hqd3R5dzd3bzU3In0.TFqMjIIYtpcyh
         overscroll-behavior: contain;
       }
       
+      /* Right-side navigation */
+      /* https://www.w3schools.com/howto/howto_css_fixed_sidebar.asp */
+      .sidenav {
+        width: 60px;
+        position: fixed;
+        z-index: 1;
+        right: 10px;
+        top: 70px;
+        background-color: #111;
+        opacity: 0.7;
+        overflow-x: hidden;
+        padding: 8px 10px;
+        border-radius: 4px;
+      }
       .sidebar {
         height: 100%;
         width: 0;
@@ -278,16 +296,28 @@ pk.eyJ1IjoidHN1Z2ExMSIsImEiOiJjanFmaTA5cGIyaXFoM3hqd3R5dzd3bzU3In0.TFqMjIIYtpcyh
       
       
       #info_panel{
-         margin-top:75%;
-      }
-
-      #infoi {
-        position: fixed;
-        top: 135px;
-        right: 10px;
-        z-index: 2000;
+         bottom: -10%;
+         scroll-margin-top: 100px;
+         width:98%;
+         opacity:0.8;
+         margin-left:1%;
+         padding: 8px;
+         border-radius: 8px;
       }
       
+      #info_panel2{
+         scroll-margin-top: 100px;
+         width:98%;
+         margin-left:1%;         
+      }      
+
+    /* TOC on right with links to different sections 
+      #infoi {
+        position: relative;
+
+      }
+    */
+    
       /* width */
       ::-webkit-scrollbar {
         width: 10px;
@@ -312,6 +342,77 @@ pk.eyJ1IjoidHN1Z2ExMSIsImEiOiJjanFmaTA5cGIyaXFoM3hqd3R5dzd3bzU3In0.TFqMjIIYtpcyh
         z-index: 2000;
       }
       
+      /* These leaflet-bar things adjust the style of the zoom controls */
+      .leaflet-bar{
+        width:50px;
+        float:center;
+      }
+      .leaflet-bar a, .leaflet-control-layers-toggle {
+        width: 75%;
+        background-color:#111;
+        color:white;
+        float: center;
+      }
+      .leaflet-bar a, .leaflet-bar a:hover{
+        width:75%;
+        border-bottom:0;
+      }
+      .leaflet-bar a.leaflet-disabled{
+        background-color:#111;
+        color:white;
+      }
+      
+      
+      .leaflet-bottom.leaflet-right .leaflet-control {
+            margin-bottom: 6vh;
+            background-color: #111;
+            opacity: 0.7;
+            padding: 10px;
+            border-radius: 4px;
+      }      
+      
+      /* Arrows for the bottom-hidden info pane div */
+      .arrow_nav{
+        float:right;
+      }
+      
+      .arrow{
+        border: solid black;
+        border-width: 0 3px 3px 0;
+        display: inline-block;
+        padding: 3px;
+      }
+      
+      .arrow_down {
+        position: relative;
+        top: -5px;
+        content: "";
+        display: inline-block;
+        width: 15px;
+        height: 15px;
+        border-right: 0.2em solid #818181;
+        border-top: 0.2em solid #818181;
+        transform: rotate(135deg);
+        margin-right: 0.5em;
+        margin-left: 1.0em;
+
+      }
+      
+      .arrow_up {
+        position: relative;
+        top: -5px;
+        content: "";
+        display: inline-block;
+        width: 15px;
+        height: 15px;
+        border-right: 0.2em solid #818181;
+        border-top: 0.2em solid #818181;
+        transform: rotate(-45deg);
+        margin-right: 0.5em;
+        margin-left: 1.0em;
+       } 
+
+      
     </style>
     
   </head>
@@ -324,6 +425,35 @@ pk.eyJ1IjoidHN1Z2ExMSIsImEiOiJjanFmaTA5cGIyaXFoM3hqd3R5dzd3bzU3In0.TFqMjIIYtpcyh
   
     <nav class="navbar fixed-top navbar-dark" style="background-color: #111;">
       
+      <div class="sidenav" >
+        
+            <table>
+            <tr>
+              <td id = "right_sidebar">
+              </td>
+            </tr>
+            <tr >
+              <td style = "padding-top:20px">
+                <a href="#top" style = "color:white">Map</a>
+              </td>
+            </tr>
+            
+            <tr>
+              <td>
+                <a href="#info_panel" style = "color:white">Stats</a>
+              </td>
+            </tr>
+            
+            <tr>
+              <td>
+                <a href="#info_panel2" style = "color:white">Other</a>
+              </td>
+            </tr>
+            
+            </table>        
+
+      </div>      
+      
       <button class="openbtn" onclick="openNav()">&#9776;</button>  
     
       <div id="mySidebar" class="sidebar">
@@ -331,7 +461,7 @@ pk.eyJ1IjoidHN1Z2ExMSIsImEiOiJjanFmaTA5cGIyaXFoM3hqd3R5dzd3bzU3In0.TFqMjIIYtpcyh
         <!-- <a id = "href_about" href="#">About</a> -->
         <button class="accordion">Basemap</button>
         <div class = 'panel'>
-          <a id = 'basemap_dark' href = "#" style = "font-size:20px; padding:0;">Dark</a>
+          <a id = 'basemap_dark' href = "#" style = "font-size:20px; padding:0;">Relief</a>
           <a id = 'basemap_satellite' href = "#" style = "font-size:20px; padding:0;">Satellite</a>
         </div>
 
@@ -403,33 +533,31 @@ pk.eyJ1IjoidHN1Z2ExMSIsImEiOiJjanFmaTA5cGIyaXFoM3hqd3R5dzd3bzU3In0.TFqMjIIYtpcyh
     
     <script>
     
+    // Put zoom and TOC in small right hand sidebar
+    //https://stackoverflow.com/questions/41475855/adding-leaflet-layer-control-to-sidebar
       $(document).ready(function(){
         
         if(L.Browser.mobile){
-          console.log("MOBILE");
-    
+
           $("#info_panel").css({
-             "margin-top" : "120%"
+             "margin-top" : "82vh"
           });
         }
         else{
-          console.log("NOT MOBILE");
-          
+
           $("#info_panel").css({
-             "margin-top" : "75%"
+             "margin-top" : "82vh"
           });
           
-          console.log($("#info_panel").css("margin-top"));
         }
         
       })
 
-    
+    /*
     var windowHt = window.innerHeight;
     var scrollHt = 135;
     var scrollDir;
     var scroll_01 = $(document).scrollTop();
-
 
       $(document).scroll(function() {
         
@@ -466,36 +594,138 @@ pk.eyJ1IjoidHN1Z2ExMSIsImEiOiJjanFmaTA5cGIyaXFoM3hqd3R5dzd3bzU3In0.TFqMjIIYtpcyh
         
         scroll_01 = $(this).scrollTop();
         
-      });      
+      }); 
+      */
+      
     </script>
+    
+
     
     <div id = "wrapper">
       <div id = "map" class = "panels"></div>
+      
       <div id = "info_panel" class = "panels" style = "background-color:#111">
-        <p>This is panel 1</p>
+        
+
+          
+          <a id = "this_up_down" class = "up_down_arrow" style = "float:right; cursor:pointer;">
+            <span class = "arrow_up" style = "margin-top: 15px; margin-right: 70px;"></span>
+          </a>
+          
+  
+        
+        <ul class="nav nav-tabs">
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#home">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" data-toggle="tab" href="#profile">Profile</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link disabled" href="#">Disabled</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Dropdown</a>
+            <div class="dropdown-menu" style="">
+              <a class="dropdown-item" href="#">Action</a>
+              <a class="dropdown-item" href="#">Another action</a>
+              <a class="dropdown-item" href="#">Something else here</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="#">Separated link</a>
+            </div>
+          </li>
+        </ul>
+      
+        <div id="myTabContent" class="tab-content">
+          <div class="tab-pane fade" id="home">
+            <p>Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terry richardson ex squid. Aliquip placeat salvia cillum iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui.</p>
+          </div>
+          <div class="tab-pane fade active show" id="profile">
+            <p>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit.</p>
+          </div>
+          <div class="tab-pane fade" id="dropdown1">
+            <p>Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney's organic lomo retro fanny pack lo-fi farm-to-table readymade. Messenger bag gentrify pitchfork tattooed craft beer, iphone skateboard locavore carles etsy salvia banksy hoodie helvetica. DIY synth PBR banksy irony. Leggings gentrify squid 8-bit cred pitchfork.</p>
+          </div>
+          <div class="tab-pane fade" id="dropdown2">
+            <p>Trust fund seitan letterpress, keytar raw denim keffiyeh etsy art party before they sold out master cleanse gluten-free squid scenester freegan cosby sweater. Fanny pack portland seitan DIY, art party locavore wolf cliche high life echo park Austin. Cred vinyl keffiyeh DIY salvia PBR, banh mi before they sold out farm-to-table VHS viral locavore cosby sweater.</p>
+          </div>
+        
+        </div> 
+         
       </div>
 
+    <!-- THIS CHANGES THE UP ARROW on the in info panel to a down arrow and changes the href -->
+    <script>  
+
+      $('#this_up_down').click(function(){
+
+        //$(this).attr('href', $(this).children('span').attr( "class" ) == "arrow_up" ? '#info_panel' : '#map');
+        //alert($(this).attr('href'));
+        $(this).children('span').toggleClass('arrow_up arrow_down');
+
+        if($(this).children('span').hasClass("arrow_up")){
+          
+          $('body, html').animate({
+                  scrollTop: 0
+              }, 10);          
+        }
+        else{
+          $('body, html').animate({
+                  scrollTop: $("#info_panel").offset().top - 100
+              }, 10);           
+        }
+
+      });
+      
+      $('#this_up_down').mouseenter(function(){
+        $(this).children('span').css("border-right", "0.2em solid #f1f1f1").css("border-top", "0.2em solid #f1f1f1");
+      });
+      $('#this_up_down').mouseleave(function(){
+        $(this).children('span').css("border-right", "0.2em solid #818181").css("border-top", "0.2em solid #818181");
+      });      
+      
+    </script>
+
       <div id = "info_panel2" class = "panels" style = "background-color:#111">
-        <p>This is panel 2</p>
+        <ul class="nav nav-tabs">
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#home">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" data-toggle="tab" href="#profile">Profile</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link disabled" href="#">Disabled</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Dropdown</a>
+            <div class="dropdown-menu" style="">
+              <a class="dropdown-item" href="#">Action</a>
+              <a class="dropdown-item" href="#">Another action</a>
+              <a class="dropdown-item" href="#">Something else here</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="#">Separated link</a>
+            </div>
+
+          </li>
+        </ul>
+        <div id="myTabContent" class="tab-content">
+          <div class="tab-pane fade" id="home">
+            <p>Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terry richardson ex squid. Aliquip placeat salvia cillum iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui.</p>
+          </div>
+          <div class="tab-pane fade active show" id="profile">
+            <p>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit.</p>
+          </div>
+          <div class="tab-pane fade" id="dropdown1">
+            <p>Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney's organic lomo retro fanny pack lo-fi farm-to-table readymade. Messenger bag gentrify pitchfork tattooed craft beer, iphone skateboard locavore carles etsy salvia banksy hoodie helvetica. DIY synth PBR banksy irony. Leggings gentrify squid 8-bit cred pitchfork.</p>
+          </div>
+          <div class="tab-pane fade" id="dropdown2">
+            <p>Trust fund seitan letterpress, keytar raw denim keffiyeh etsy art party before they sold out master cleanse gluten-free squid scenester freegan cosby sweater. Fanny pack portland seitan DIY, art party locavore wolf cliche high life echo park Austin. Cred vinyl keffiyeh DIY salvia PBR, banh mi before they sold out farm-to-table VHS viral locavore cosby sweater.</p>
+          </div>
+        </div>        
       </div>
       
-      <div id = "infoi">
-          <table>
-          
-          <tr>
-          <td>
-          <a href="#top" style = "color:white">Map</a>
-          </td>
-          </tr>
-          
-          <tr>
-          <td>
-          <a href="#info_panel" style = "color:white">Stats</a>
-          </td>
-          </tr>
-          
-          </table>        
-      </div>
+
       
     </div>
 
@@ -518,7 +748,7 @@ pk.eyJ1IjoidHN1Z2ExMSIsImEiOiJjanFmaTA5cGIyaXFoM3hqd3R5dzd3bzU3In0.TFqMjIIYtpcyh
   
   
  
-  
+
   
   <!-- ALL THE MAPPING AND TILES STUFF -->
     <script>
@@ -527,7 +757,8 @@ pk.eyJ1IjoidHN1Z2ExMSIsImEiOiJjanFmaTA5cGIyaXFoM3hqd3R5dzd3bzU3In0.TFqMjIIYtpcyh
       map = L.map('map', {
         minZoom: 9,
         maxZoom: 21,
-        zoomControl: false
+        zoomControl: false,
+        gestureHandling: true
       }).setView([39.1, -120.4], 9); // Create map object and pass it our options object from above
       
       
@@ -535,11 +766,17 @@ pk.eyJ1IjoidHN1Z2ExMSIsImEiOiJjanFmaTA5cGIyaXFoM3hqd3R5dzd3bzU3In0.TFqMjIIYtpcyh
         console.log(map.getZoom())
       });      
       
-        
-      L.control.zoom({
-        position:'topright'
-      }).addTo(map);
-      
+      // Put zoom and TOC in small right hand sidebar
+      //https://stackoverflow.com/questions/41475855/adding-leaflet-layer-control-to-sidebar
+      var zoomCtrl = L.control.zoom({ position:'topright' }).addTo(map);
+
+      var zoomCtrl_htmlObject = zoomCtrl.getContainer();
+      var a_right_sidebar = document.getElementById('right_sidebar')
+        function setParent(el, newParent){
+          newParent.appendChild(el);
+        }
+        setParent(zoomCtrl_htmlObject, a_right_sidebar);
+
 
 
     //var toc = L.control({position: 'topright'})
