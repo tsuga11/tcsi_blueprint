@@ -29,10 +29,11 @@ pk.eyJ1IjoidHN1Z2ExMSIsImEiOiJjanFmaTA5cGIyaXFoM3hqd3R5dzd3bzU3In0.TFqMjIIYtpcyh
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel='stylesheet' />
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.css' rel='stylesheet' />
     <link href='https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.css' rel='stylesheet' />
-    <link href='bootstrap.min.css' rel='stylesheet' />
+
     <link href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css" rel="stylesheet" />
     <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>  
-      
+    <!-- <link href="hamburgers.css" rel="stylesheet"> -->
+    
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
@@ -43,9 +44,23 @@ pk.eyJ1IjoidHN1Z2ExMSIsImEiOiJjanFmaTA5cGIyaXFoM3hqd3R5dzd3bzU3In0.TFqMjIIYtpcyh
   
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/leaflet.js"></script>
     <script src="https://unpkg.com/leaflet.vectorgrid@latest/dist/Leaflet.VectorGrid.bundled.js"></script>
+     
+     <script src="//unpkg.com/vis-charts@latest/dist/vis.min.js"></script>
+    <link href="//unpkg.com/vis-charts@latest/dist/vis.min.css" rel="stylesheet" type="text/css">
+    <!--
+    div-charts (i.e., above vis.min.js) should be removed in favor of the below vis-networ and vis-timeline
+     but as of now, vis-network and vis-timeline are not working well together. vis-timeline includes graph2d, 
+     which we want to use for the logic models.
+     See: https://stackoverflow.com/questions/58092020/combine-vis-network-and-vis-timeline-on-same-page and
+          https://github.com/visjs/vis-network/pull/85
+    <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
     
-<link rel="stylesheet" href="//unpkg.com/leaflet-gesture-handling/dist/leaflet-gesture-handling.min.css" type="text/css">
-<script src="//unpkg.com/leaflet-gesture-handling"></script>    
+    
+    <script type="text/javascript" src="https://unpkg.com/vis-timeline@latest/standalone/umd/vis-timeline-graph2d.min.js"></script>
+    <link href="//unpkg.com/vis-timeline@latest/styles/vis-timeline-graph2d.min.css" rel="stylesheet" type="text/css" /> -->
+    
+    <link rel="stylesheet" href="//unpkg.com/leaflet-gesture-handling/dist/leaflet-gesture-handling.min.css" type="text/css">
+    <script src="//unpkg.com/leaflet-gesture-handling"></script>    
     <!-- MBTiles for leaflet. Downloaded from https://gitlab.com/IvanSanchez/Leaflet.TileLayer.MBTiles -->
     <script src="https://unpkg.com/sql.js@0.3.2/js/sql.js"></script>
     
@@ -85,17 +100,17 @@ pk.eyJ1IjoidHN1Z2ExMSIsImEiOiJjanFmaTA5cGIyaXFoM3hqd3R5dzd3bzU3In0.TFqMjIIYtpcyh
         width: 0;
         position: fixed;
         z-index: 1;
-        top: 0;
+        top: 55px;
         left: 0;
         background-color: #111;
         opacity: 0.8;
         overflow-x: hidden;
         transition: 0.5s;
-        padding-top: 60px;
+        padding-top: 15px;
       }
       
       .sidebar a {
-        padding: -1px 8px 8px 10px;
+        padding: -1px 2px 2px 2px;
         text-decoration: none;
         font-size: 25px;
         color: #818181;
@@ -107,35 +122,116 @@ pk.eyJ1IjoidHN1Z2ExMSIsImEiOiJjanFmaTA5cGIyaXFoM3hqd3R5dzd3bzU3In0.TFqMjIIYtpcyh
         color: #f1f1f1;
       }
 
-      .sidebar .closebtn {
-        position: absolute;
-        top: 0;
-        right: 25px;
-        font-size: 36px;
-        margin-left: 55px;
-      }
-      
-      .openbtn {
-        font-size: 25px;
+
+     /*!
+       * Hamburgers
+       * @description Tasty CSS-animated hamburgers
+       * @author Jonathan Suh @jonsuh
+       * @site https://jonsuh.com/hamburgers
+       * @link https://github.com/jonsuh/hamburgers
+       */
+      .hamburger {
+        padding: 15px 5px 10px 15px;
+        display: inline-block;
         cursor: pointer;
-        background-color: #111;
+        transition-property: opacity, filter;
+        transition-duration: 0.15s;
+        transition-timing-function: linear;
+        font: inherit;
         color: #818181;
-        padding: 10px 15px;
-        border: none;
+        text-transform: none;
+        background-color: #111;
+        border: 0;
+        margin: 0;
+        overflow: visible; }
+        .hamburger:hover .hamburger-inner {
+          background-color: #f1f1f1;
+        }
+        .hamburger:hover .hamburger-inner::before {
+          background-color: #f1f1f1;
+        }
+        .hamburger:hover .hamburger-inner::after {
+          background-color: #f1f1f1;
+        }
+        .hamburger.is-active:hover .hamburger-inner {
+          background-color: #f1f1f1;
+        }
+        .hamburger.is-active:hover .hamburger-inner::before {
+          background-color: #f1f1f1;
+        }
+        .hamburger.is-active:hover .hamburger-inner::after {
+          background-color: #f1f1f1;
+        }        
+        .hamburger.is-active .hamburger-inner,
+        .hamburger.is-active .hamburger-inner::before,
+        .hamburger.is-active .hamburger-inner::after {
+          color: #f1f1f1; }
+      
+      .hamburger-box {
+        width: 40px;
+        height: 24px;
+        display: inline-block;
+        position: relative; 
+        padding:0;
       }
       
-      .openbtn:hover {
-        background-color: #111;
-        color: #f1f1f1;
-      }
+      .hamburger-inner {
+        display: block;
+        top: 50%;
+        margin-top: -2px; }
+        
+        /* change this width to change the width of the hamburger  */
+        .hamburger-inner, .hamburger-inner::before, .hamburger-inner::after {
+          width: 30px; 
+          height: 3px;
+          background-color: #818181;
+          border-radius: 4px;
+          position: absolute;
+          transition-property: transform;
+          transition-duration: 0.15s;
+          transition-timing-function: ease; }
+        .hamburger-inner::before, .hamburger-inner::after {
+          content: "";
+          display: block; }
+        .hamburger-inner::before {
+          top: -10px; }
+        .hamburger-inner::after {
+          bottom: -10px; }
+        .hamburger-inner:hover{
+          color: #f1f1f1;
+        }
+
     
+      .hamburger--slider .hamburger-inner {
+        top: 2px; }
+        .hamburger--slider .hamburger-inner::before {
+          top: 10px;
+          transition-property: transform, opacity;
+          transition-timing-function: ease;
+          transition-duration: 0.15s; }
+        .hamburger--slider .hamburger-inner::after {
+          top: 20px; }
+      
+      .hamburger--slider.is-active .hamburger-inner {
+        transform: translate3d(0, 10px, 0) rotate(45deg); }
+        .hamburger--slider.is-active .hamburger-inner::before {
+          transform: rotate(-45deg) translate3d(-5.71429px, -6px, 0);
+          opacity: 0; }
+        .hamburger--slider.is-active .hamburger-inner::after {
+          transform: translate3d(0, -20px, 0) rotate(-90deg); }
+
+      .hamburger:active, .hamburger:focus {
+        outline: 0;
+        border: none;
+        -moz-outline-style: none;
+      }
 
       /* https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_accordion_animate */
       .accordion {
         background-color: #111; /* Change this to add color to the background of a dropdown menu title */
         color: #818181;
         width: 100%;
-        padding: 8px 8px 8px 10px;
+        padding: 2px 2px 2px 10px;
         font-size: 20px;
         cursor: pointer;
         border: none;
@@ -198,11 +294,6 @@ pk.eyJ1IjoidHN1Z2ExMSIsImEiOiJjanFmaTA5cGIyaXFoM3hqd3R5dzd3bzU3In0.TFqMjIIYtpcyh
         .sidebar a {font-size: 18px;}
       }
       
-      @media screen and (max-width: 960px) {
-        #mySidebar {width: 200px;}
-        #main {margin-left: 200px;}
-      }
-      
 
       
       .slider {
@@ -215,6 +306,11 @@ pk.eyJ1IjoidHN1Z2ExMSIsImEiOiJjanFmaTA5cGIyaXFoM3hqd3R5dzd3bzU3In0.TFqMjIIYtpcyh
         -webkit-transition: .2s;
         transition: opacity .2s;
       }
+      
+      div:active, div:focus {
+        outline: 0;
+        -moz-outline-style: none;
+      }      
       
       .slider:hover {
         opacity: 1;
@@ -297,8 +393,8 @@ pk.eyJ1IjoidHN1Z2ExMSIsImEiOiJjanFmaTA5cGIyaXFoM3hqd3R5dzd3bzU3In0.TFqMjIIYtpcyh
       
       #info_panel{
          bottom: -10%;
-         scroll-margin-top: 100px;
-         width:98%;
+         scroll-margin-top: 200px;
+         width: 98%;
          opacity:0.8;
          margin-left:1%;
          padding: 8px;
@@ -321,6 +417,7 @@ pk.eyJ1IjoidHN1Z2ExMSIsImEiOiJjanFmaTA5cGIyaXFoM3hqd3R5dzd3bzU3In0.TFqMjIIYtpcyh
       /* width */
       ::-webkit-scrollbar {
         width: 10px;
+        border-radius: 12px;
       }
       
       /* Track */
@@ -413,6 +510,62 @@ pk.eyJ1IjoidHN1Z2ExMSIsImEiOiJjanFmaTA5cGIyaXFoM3hqd3R5dzd3bzU3In0.TFqMjIIYtpcyh
        } 
 
       
+      #mynetwork {
+        margin: 0px;
+        padding: 0px; 
+        
+        position: absolute;
+        display: inline-block;
+        top: 5vh;
+        left: 0px;
+        bottom: 0px;
+        right: 0%;
+        
+        background: transparent;
+      }
+      
+      
+      /* The Modal (background) */
+      .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 5000; /* Sit on top */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(0,0,0); /* Fallback color */
+        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+      }
+      
+      /* Modal Content/Box */
+      .modal-content {
+        background-color: #fefefe;
+        margin: 15% auto; /* 15% from the top and centered */
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%; /* Could be more or less, depending on screen size */
+      }
+      
+      /* The Close Button */
+      .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+      }
+      
+      .close:hover,
+      .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+      }      
+
+      body.modal-open div.modal-backdrop { 
+          z-index: 0 !important; 
+      }      
     </style>
     
   </head>
@@ -432,8 +585,14 @@ pk.eyJ1IjoidHN1Z2ExMSIsImEiOiJjanFmaTA5cGIyaXFoM3hqd3R5dzd3bzU3In0.TFqMjIIYtpcyh
               <td id = "right_sidebar">
               </td>
             </tr>
+            </table>
+            
+            <hr color = "white" style = "border-top: 2px solid white; padding:0;">
+            
+            <table>
             <tr >
-              <td style = "padding-top:20px">
+              <td >
+
                 <a href="#top" style = "color:white">Map</a>
               </td>
             </tr>
@@ -454,11 +613,22 @@ pk.eyJ1IjoidHN1Z2ExMSIsImEiOiJjanFmaTA5cGIyaXFoM3hqd3R5dzd3bzU3In0.TFqMjIIYtpcyh
 
       </div>      
       
-      <button class="openbtn" onclick="openNav()">&#9776;</button>  
+      <!-- 
+      <button class="openbtn" id = "openButton">&#9776;</button> 
+      -->
+      
+      <!-- https://github.com/jonsuh/hamburgers  -->
+      <button class="hamburger hamburger--slider" id = "openButton" type="button">
+        <span class="hamburger-box">
+          <span class="hamburger-inner"></span>
+        </span>
+      </button>      
     
       <div id="mySidebar" class="sidebar">
+        <!-- 
         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">x</a>
-        <!-- <a id = "href_about" href="#">About</a> -->
+        <a id = "href_about" href="#">About</a> 
+        -->
         <button class="accordion">Basemap</button>
         <div class = 'panel'>
           <a id = 'basemap_dark' href = "#" style = "font-size:20px; padding:0;">Relief</a>
@@ -531,6 +701,23 @@ pk.eyJ1IjoidHN1Z2ExMSIsImEiOiJjanFmaTA5cGIyaXFoM3hqd3R5dzd3bzU3In0.TFqMjIIYtpcyh
       
     </nav>
     
+    
+    
+    <script>
+    
+    // Change hamburger button class on click from open hamburger to close X
+    $(document).ready(function(){
+      
+      $('#openButton').click(function(){
+        $(this).children('span').toggleClass('hamburger hamburger--slider" "hamburger hamburger--slider is-active');
+      })
+      
+    })
+    
+    </script>
+    
+    
+    
     <script>
     
     // Put zoom and TOC in small right hand sidebar
@@ -602,8 +789,20 @@ pk.eyJ1IjoidHN1Z2ExMSIsImEiOiJjanFmaTA5cGIyaXFoM3hqd3R5dzd3bzU3In0.TFqMjIIYtpcyh
 
     
     <div id = "wrapper">
+      
       <div id = "map" class = "panels"></div>
       
+            <!-- The Modal -->
+            <div id="myModal" class="modal">
+            
+              <!-- Modal content -->
+              <div class="modal-content">
+                <span class="close">&times;</span>
+                <div id = "logic_graph_container"></div>
+              </div>
+            
+            </div>
+            
       <div id = "info_panel" class = "panels" style = "background-color:#111">
         
 
@@ -616,43 +815,226 @@ pk.eyJ1IjoidHN1Z2ExMSIsImEiOiJjanFmaTA5cGIyaXFoM3hqd3R5dzd3bzU3In0.TFqMjIIYtpcyh
         
         <ul class="nav nav-tabs">
           <li class="nav-item">
-            <a class="nav-link" data-toggle="tab" href="#home">Home</a>
+            <a class="nav-link active" data-toggle="tab" href="#home">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link active" data-toggle="tab" href="#profile">Profile</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link disabled" href="#">Disabled</a>
+            <a class="nav-link " data-toggle="tab" href="#profile">Data</a>
           </li>
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Dropdown</a>
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Logic model</a>
             <div class="dropdown-menu" style="">
-              <a class="dropdown-item" href="#">Action</a>
-              <a class="dropdown-item" href="#">Another action</a>
-              <a class="dropdown-item" href="#">Something else here</a>
+              <a class="dropdown-item" data-toggle="tab" href="#dropdown1">Resilience</a>
+              <a class="dropdown-item" data-toggle="tab" href="#dropdown2">Biodiveristy</a>
+              <a class="dropdown-item" data-toggle="tab" href="#dropdown3" id = "fire_button">Fire dynamics</a>
+              <a class="dropdown-item" data-toggle="tab" href="#dropdown2">Wetland integrity</a>
+              <a class="dropdown-item" data-toggle="tab" href="#dropdown1">Water reliability</a>
+              <a class="dropdown-item" data-toggle="tab" href="#dropdown2">Carbon seq.</a>
+              <a class="dropdown-item" data-toggle="tab" href="#dropdown1">Air quality</a>
+              <a class="dropdown-item" data-toggle="tab" href="#dropdown2">Fire adapted comm.</a>
+              <a class="dropdown-item" data-toggle="tab" href="#dropdown1">Econ diversity</a>
+              <a class="dropdown-item" data-toggle="tab" href="#dropdown2">Social wellbeing</a>
+              
               <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="#">Separated link</a>
+              <a class="dropdown-item" href="#">Main pillars</a>
             </div>
           </li>
+          
+          <li class="nav-item">
+            <a class="nav-link " data-toggle="tab" href="#home">Decision model</a>
+          </li>          
+          
         </ul>
       
         <div id="myTabContent" class="tab-content">
-          <div class="tab-pane fade" id="home">
+          
+          <div class="tab-pane fade active show" id="home">
             <p>Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terry richardson ex squid. Aliquip placeat salvia cillum iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui.</p>
           </div>
-          <div class="tab-pane fade active show" id="profile">
+          
+          <div class="tab-pane fade " id="profile">
             <p>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit.</p>
           </div>
+          
           <div class="tab-pane fade" id="dropdown1">
             <p>Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney's organic lomo retro fanny pack lo-fi farm-to-table readymade. Messenger bag gentrify pitchfork tattooed craft beer, iphone skateboard locavore carles etsy salvia banksy hoodie helvetica. DIY synth PBR banksy irony. Leggings gentrify squid 8-bit cred pitchfork.</p>
           </div>
+          
           <div class="tab-pane fade" id="dropdown2">
             <p>Trust fund seitan letterpress, keytar raw denim keffiyeh etsy art party before they sold out master cleanse gluten-free squid scenester freegan cosby sweater. Fanny pack portland seitan DIY, art party locavore wolf cliche high life echo park Austin. Cred vinyl keffiyeh DIY salvia PBR, banh mi before they sold out farm-to-table VHS viral locavore cosby sweater.</p>
           </div>
+          
+          <div class="tab-pane fade" id = "dropdown3">
+            
+            <div id = "mynetwork"></div>
+
+
+            
+          </div>          
         
         </div> 
          
       </div>
+    
+    </div>
+
+
+
+    <script>
+    // Other example: https://jsbin.com/kurukuxeza/edit?html,output
+    
+      // create an array with nodes
+      var nodes = new vis.DataSet([
+        { id: 1, label: "Node 1" },
+        { id: 2, label: "Node 2" },
+        { id: 3, label: "Node 3" },
+        { id: 4, label: "Node 4" },
+        { id: 5, label: "Node 5" }
+      ]);
+
+      // create an array with edges
+      var edges = new vis.DataSet([
+        { from: 1, to: 3 },
+        { from: 1, to: 2 },
+        { from: 2, to: 4 },
+        { from: 2, to: 5 },
+        { from: 3, to: 3 }
+      ]);
+
+      // create a network
+      var container_network = document.getElementById("mynetwork");
+      
+
+      var data_network = {
+        nodes: nodes,
+        edges: edges
+      };
+
+      
+      var options_network = {
+            locale: 'en',        
+            height: '100%',
+            width: '100%',
+            physics: {
+                 "enabled": true
+             },
+            nodes: {
+              fixed: false
+            },
+            interaction: {
+                dragNodes: true,
+                dragView:false
+            },            
+            layout: {randomSeed: 0}
+      };
+      
+
+
+  
+      var network = new vis.Network(container_network, data_network, options_network);
+
+
+
+      // For some reason it is placing the network in the upperleft corner, this moves it once the mouse is over...
+      //  pretty rediculous...
+      
+      $("#fire_button").on('click', function(){
+        network.moveTo({
+            position: {x:10, y:10},
+            scale: 1
+        }); 
+      }) 
+
+      $("#mynetwork").on('mouseover', function(){
+        network.moveTo({
+            position: {x:20, y:20},
+            scale: 1
+        });  
+      }) 
+
+      /*
+      THis worked too, but for some reason I couldn't zoom in or out afterwards...
+      network.on("afterDrawing", function (ctx) {
+        network.moveTo({
+            position: {x:20, y:20},
+            scale: 1
+        });        
+      });
+      */
+      
+      // OPEN MODAL DIALOGUE BOX
+      network.on( 'click', function(properties) {
+          var ids = properties.nodes;
+          var clickedNodes = nodes.get(ids);
+          clickedNodes_id = clickedNodes[0].id
+          console.log('clicked nodes:', clickedNodes_id);
+          
+
+          if(!clickedNodes[0].id !== 'undefined'){
+          
+            // Get the modal
+            var modal = document.getElementById("myModal");
+
+            // This is from the vis.js library, it is very timeline focused
+            // I think we may want to use d3: https://www.d3-graph-gallery.com/connectedscatter.html
+            var container_graph = document.getElementById('logic_graph_container');
+            
+              var items = [
+                {x: 0, y: -1},
+                {x: 250, y: 1},
+                {x: 500, y: 1},
+                {x: 1000, y: -1},
+                {x: 2000, y: -1}
+              ]; 
+
+              var dataset_graph = new vis.DataSet(items);
+              
+              var options_graph = {
+                start: 0,
+                end: 2000,
+                lineTension: 0
+              };
+              
+          
+              var graph2d = new vis.Graph2d(container_graph, dataset_graph, options_graph);
+              
+            //$('#myModal').modal('show'); 
+            //$(".modal-content").children("div").text("Clicked on node: " + clickedNodes_id);            
+            
+            // Get the <span> element that closes the modal
+            var span = document.getElementsByClassName("close")[0];
+            
+            // When the user clicks the button, open the modal 
+  
+              modal.style.display = "block";
+            
+            
+            // When the user clicks on <span> (x), close the modal
+            span.onclick = function() {
+              modal.style.display = "none";
+              graph2d.destroy();
+            }
+            
+            // When the user clicks anywhere outside of the modal, close it
+            window.onclick = function(event) {
+              if (event.target == modal) {
+                modal.style.display = "none";
+                graph2d.destroy();
+              }
+            } 
+            
+          }
+
+         
+
+      });
+      
+
+
+    </script>
+
+
+
+
 
     <!-- THIS CHANGES THE UP ARROW on the in info panel to a down arrow and changes the href -->
     <script>  
@@ -686,52 +1068,7 @@ pk.eyJ1IjoidHN1Z2ExMSIsImEiOiJjanFmaTA5cGIyaXFoM3hqd3R5dzd3bzU3In0.TFqMjIIYtpcyh
       
     </script>
 
-      <div id = "info_panel2" class = "panels" style = "background-color:#111">
-        <ul class="nav nav-tabs">
-          <li class="nav-item">
-            <a class="nav-link" data-toggle="tab" href="#home">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active" data-toggle="tab" href="#profile">Profile</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link disabled" href="#">Disabled</a>
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Dropdown</a>
-            <div class="dropdown-menu" style="">
-              <a class="dropdown-item" href="#">Action</a>
-              <a class="dropdown-item" href="#">Another action</a>
-              <a class="dropdown-item" href="#">Something else here</a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="#">Separated link</a>
-            </div>
 
-          </li>
-        </ul>
-        <div id="myTabContent" class="tab-content">
-          <div class="tab-pane fade" id="home">
-            <p>Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terry richardson ex squid. Aliquip placeat salvia cillum iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui.</p>
-          </div>
-          <div class="tab-pane fade active show" id="profile">
-            <p>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit.</p>
-          </div>
-          <div class="tab-pane fade" id="dropdown1">
-            <p>Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney's organic lomo retro fanny pack lo-fi farm-to-table readymade. Messenger bag gentrify pitchfork tattooed craft beer, iphone skateboard locavore carles etsy salvia banksy hoodie helvetica. DIY synth PBR banksy irony. Leggings gentrify squid 8-bit cred pitchfork.</p>
-          </div>
-          <div class="tab-pane fade" id="dropdown2">
-            <p>Trust fund seitan letterpress, keytar raw denim keffiyeh etsy art party before they sold out master cleanse gluten-free squid scenester freegan cosby sweater. Fanny pack portland seitan DIY, art party locavore wolf cliche high life echo park Austin. Cred vinyl keffiyeh DIY salvia PBR, banh mi before they sold out farm-to-table VHS viral locavore cosby sweater.</p>
-          </div>
-        </div>        
-      </div>
-      
-
-      
-    </div>
-
-
- 
-  
   
   <!-- 
   RASTER TILES:
@@ -1886,9 +2223,27 @@ pk.eyJ1IjoidHN1Z2ExMSIsImEiOiJjanFmaTA5cGIyaXFoM3hqd3R5dzd3bzU3In0.TFqMjIIYtpcyh
      
   <script>
     
+    document.getElementById("openButton").addEventListener("click", toggleNav);
+    
+    function toggleNav(){
+      navSize = document.getElementById("mySidebar").style.width;
+
+      if (navSize == "300px" || navSize == "200px") {
+        return closeNav();
+      }
+      else{
+        return openNav();  
+      }
+      
+    }
+    
+    
+    var sidebar_ct = 0
+    
       // Javascript for opening and closing the sidebar...
       function openNav() {
-      
+        sidebar_ct += 1
+        
         this_var = document.getElementById("mySidebar").style.width
         
         if ($(window).width() < 960) {
@@ -1904,7 +2259,7 @@ pk.eyJ1IjoidHN1Z2ExMSIsImEiOiJjanFmaTA5cGIyaXFoM3hqd3R5dzd3bzU3In0.TFqMjIIYtpcyh
       
       function closeNav() {
         document.getElementById("mySidebar").style.width = "0";
-        document.getElementById("main").style.marginLeft= "0";
+    //    document.getElementById("main").style.marginLeft= "0";
       }
     
   </script>
@@ -1933,8 +2288,21 @@ pk.eyJ1IjoidHN1Z2ExMSIsImEiOiJjanFmaTA5cGIyaXFoM3hqd3R5dzd3bzU3In0.TFqMjIIYtpcyh
     <!-- Close the sidebar everytime you resize the screen... -->
     <script>
       $(document).ready(function(){
+        
         $(window).resize(closeNav);
+        
       });
+      
+      
+      $( window ).resize(function() {
+
+        if($('#mySidebar').width() > 0){
+
+          $('#openButton').children('span').toggleClass('hamburger hamburger--slider" "hamburger hamburger--slider is-active');
+          
+        }
+
+      });      
     </script>  
   
   
@@ -1953,6 +2321,10 @@ pk.eyJ1IjoidHN1Z2ExMSIsImEiOiJjanFmaTA5cGIyaXFoM3hqd3R5dzd3bzU3In0.TFqMjIIYtpcyh
       
     </script>
 -->     
+
+
+   
+
   </body>
   
 </html> 
